@@ -128,7 +128,6 @@ class HttpCompileTest extends Simulation {
   private val scn = scenario("Scn")
     // method
     .exec(http("Request").get("/"))
-    .exec(http("Request").get(Uri.create("/")))
     .exec(http("Request").put("/"))
     .exec(http("Request").post("/"))
     .exec(http("Request").patch("/"))
@@ -136,12 +135,6 @@ class HttpCompileTest extends Simulation {
     .exec(http("Request").delete("/"))
     .exec(http("Request").options("/"))
     .exec(http("Request").httpRequest(HttpMethod.valueOf("JSON"), "/support/get-plot-data?chartID=66"))
-    .exec(http("Request").httpRequest("GET", _ => "/foo"))
-    .exec(http("Request").httpRequest("GET", "#{foo}"))
-    .exec(http("Request").httpRequest(Left("GET".expressionSuccess), Left("/foo".expressionSuccess)))
-    .exec(http("Request").httpRequest(Left("GET".expressionSuccess), Right(Uri.create("/foo"))))
-    .exec(http("Request").httpRequest(Right(HttpMethod.GET), Left("/foo".expressionSuccess)))
-    .exec(http("Request").httpRequest(Right(HttpMethod.GET), Right(Uri.create("/foo"))))
     // url function
     .exec(http("Request").get(_ => "/"))
     // headers

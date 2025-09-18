@@ -149,25 +149,24 @@ class HttpIntegrationSpec extends HttpSpec with CoreDsl with HttpDsl {
     }
 
     runWithHttpServer(handler) { implicit httpServer =>
-      def resolve(value: Expression[String]): Expression[String] = session => value(session)
       val session = runScenario(
         scenario("Dynamic HTTP method")
           .exec(_.set("get", "GET").set("post", "POST"))
           .exec(
             http("GET page")
-              .httpRequest(Left(resolve("#{get}")), Left(resolve("/get_page")))
+              .httpRequestDynamic("#{get}", "/get_page")
               .check(regexCheck("Hello GET"))
               .resources(
                 http("GET resource")
-                  .httpRequest(Left(resolve("#{get}")), Left(resolve("/get_page")))
+                  .httpRequestDynamic("#{get}", "/get_page")
                   .check(regexCheck("Hello GET"))
               ),
             http("POST page")
-              .httpRequest(Left(resolve("#{post}")), Left(resolve("/post_page")))
+              .httpRequestDynamic("#{post}", "/post_page")
               .check(regexCheck("Hello POST"))
               .resources(
                 http("POST resource")
-                  .httpRequest(Left(resolve("#{post}")), Left(resolve("/post_page")))
+                  .httpRequestDynamic("#{post}", "/post_page")
                   .check(regexCheck("Hello POST"))
               )
           )
